@@ -1,2 +1,5 @@
+http://example.com/2022/10/11/Meaning%20of%20man%20page%20numbers/
+http://example.com/2022/10/11/Linux%20Directory/
+http://example.com/2022/10/11/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/
 http://example.com/2022/10/03/hello-world/
 http://example.com/
