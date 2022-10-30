@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>I/O basic | 文弱书生孙大彪</title>
+  <meta name="description" content="File I&#x2F;O Basics文件描述符（file descriptor）调用 open 函数会有一个返回值，函数执行成功的情况下，会返回一个非负整数，该返回值就是一个文件描述符(file descriptor)，对于 Linux 内核而言，所有打开的文件都会通过文件描述符进行索引。一个进程可以打开多个文件，但是在 Linux 系统中，一个进程可以打开的文件数是有限制，并不是可以无限制打">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I&#x2F;O basic">
+<meta property="og:url" content="https://noobnemo.live/2022/10/30/I-O-basic/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="File I&#x2F;O Basics文件描述符（file descriptor）调用 open 函数会有一个返回值，函数执行成功的情况下，会返回一个非负整数，该返回值就是一个文件描述符(file descriptor)，对于 Linux 内核而言，所有打开的文件都会通过文件描述符进行索引。一个进程可以打开多个文件，但是在 Linux 系统中，一个进程可以打开的文件数是有限制，并不是可以无限制打">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-30T11:03:21.000Z">
+<meta property="article:modified_time" content="2022-10-30T11:03:43.460Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://noobnemo.live/2022/10/30/I-O-basic/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/log.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">文弱书生孙大彪</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">开发</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> WuHan, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Linux/" style="font-size: 13px;">Linux</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/30/I-O-basic/" class="title">I/O basic</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-30T11:03:21.000Z" itemprop="datePublished">2022-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/13/Meaning-of-man-page-numbers/" class="title">Meaning of man page numbers</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-13T01:54:14.000Z" itemprop="datePublished">2022-10-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/13/Linux-Directory/" class="title">Linux Directory</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-13T01:52:43.000Z" itemprop="datePublished">2022-10-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/" class="title">C语言常用数据类型打印转换字符</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-13T01:51:48.000Z" itemprop="datePublished">2022-10-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/03/hello-world/" class="title">hello world</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-03T07:53:21.000Z" itemprop="datePublished">2022-10-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-I-O-basic" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      I/O basic
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/30/I-O-basic/" class="article-date">
+	  <time datetime="2022-10-30T11:03:21.000Z" itemprop="datePublished">2022-10-30</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/30/I-O-basic/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="File-I-x2F-O-Basics"><a href="#File-I-x2F-O-Basics" class="headerlink" title="File I&#x2F;O Basics"></a>File I&#x2F;O Basics</h1><h2 id="文件描述符（file-descriptor）"><a href="#文件描述符（file-descriptor）" class="headerlink" title="文件描述符（file descriptor）"></a><strong>文件描述符（file descriptor）</strong></h2><p>调用 open 函数会有一个返回值，函数执行成功的情况下，会返回一个非负整数，该返回值就是一个文件描述符(file descriptor)，对于 Linux 内核而言，所有打开的文件都会通过文件描述符进行索引。一个进程可以打开多个文件，但是在 Linux 系统中，一个进程可以打开的文件数是有限制，并不是可以无限制打开很多的文件，可以通过 ulimit 命令来查看进<br>程可打开的最大文件数:  </p>
+<pre><code>ulimit -n
+</code></pre>
+<p>所以对于一个进程来说，文件描述符是一种有限资源，文件描述符是从 0 开始分配的，每一个被打开的文件在同一个进程中都有一个唯一的文件描述符，不会重复，如果文件被关闭后，它对应的文件描述符将会被释放，那么这个文件描述符将可以再次分配给其它打开的文件、与对应的文件绑定起来,每次给打开的文件分配文件描述符都是从最小的没有被使用的文件描述符（0~1023）开始，如果文件被关闭后，它对应的文件描述符将会被释放.调用 open 函数打开文件的时候，分配的文件描述符一般都是从 3 开始，0、1、2 这三个文件描述符已经默认被系统占用了，分别分配给了系统标准输入（0）、标准输出（1）以及标准错误（2）.  </p>
+<h2 id="open-amp-ensp-function"><a href="#open-amp-ensp-function" class="headerlink" title="open()&amp;ensp;function"></a><strong>open()&amp;ensp;function</strong></h2><pre><code>   #include &lt;sys/types.h&gt;
+   #include &lt;sys/stat.h&gt;
+   #include &lt;fcntl.h&gt;
+
+   int open(const char *pathname, int flags);
+   int open(const char *pathname, int flags, mode_t mode);
+</code></pre>
+<p> The argument flags must include one of the  following  access  modes:  <strong>O_RDONLY</strong>,  <strong>O_WRONLY</strong>,  or <strong>O_RDWR</strong>.  These request opening the file read-only, write-only, or read&#x2F;write, respectively.  <strong>O_APPEND</strong>,the file offset is positioned at the end of the file.<strong>O_TRUNC</strong>,If the file already exists and is a regular file and the access mode allows writing (i.e., is O_RDWR or O_WRONLY) it will be truncated to length 0.</p>
+<p>The following symbolic constants are provided for mode:<br> S_IRWXU  00700 user (file owner) has read, write, and execute permission</p>
+<pre><code>          S_IRUSR  00400 user has read permission
+
+          S_IWUSR  00200 user has write permission
+
+          S_IXUSR  00100 user has execute permission
+
+          S_IRWXG  00070 group has read, write, and execute permission
+
+          S_IRGRP  00040 group has read permission
+
+          S_IWGRP  00020 group has write permission
+
+          S_IXGRP  00010 group has execute permission
+
+          S_IRWXO  00007 others have read, write, and execute permission
+
+          S_IROTH  00004 others have read permission
+
+          S_IWOTH  00002 others have write permission
+
+          S_IXOTH  00001 others have execute permission
+
+          According  to  POSIX,  the  effect  when  other bits are set in mode is unspecified.  On
+          Linux, the following bits are also honored in mode:
+
+          S_ISUID  0004000 set-user-ID bit
+
+          S_ISGID  0002000 set-group-ID bit (see inode(7)).
+
+          S_ISVTX  0001000 sticky bit (see inode(7)).
+</code></pre>
+<p>可以通过位或运算将多个宏组合在一起  </p>
+<pre><code>S_IRUSR | S_IWUSR | S_IROTH  
+</code></pre>
+<h2 id="write-amp-ensp-function"><a href="#write-amp-ensp-function" class="headerlink" title="write()&amp;ensp;function"></a><strong>write()&amp;ensp;function</strong></h2><p>write() writes up to count bytes from the buffer starting at buf to the file referred to by the file descriptor fd.</p>
+<pre><code>#include &lt;unistd.h&gt;
+
+ssize_t write(int fd, const void *buf, size_t count);  
+</code></pre>
+<p>On success, the number of bytes written is returned.  On error, -1 is returned</p>
+<h2 id="read-amp-ensp-function"><a href="#read-amp-ensp-function" class="headerlink" title="read()&amp;ensp;function"></a><strong>read()&amp;ensp;function</strong></h2><p>read() attempts to read up to count bytes from file descriptor fd into the buffer starting at buf.  </p>
+<pre><code>#include &lt;unistd.h&gt;
+
+ssize_t read(int fd, void *buf, size_t count);
+</code></pre>
+<h2 id="lseek-amp-ensp-function"><a href="#lseek-amp-ensp-function" class="headerlink" title="lseek()&amp;ensp;function"></a><strong>lseek()&amp;ensp;function</strong></h2><p> lseek()  repositions the file offset of the open file description associated with the file descriptor fd to the argument offset according  to the directive whence.</p>
+<pre><code>#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+off_t lseek(int fd, off_t offset, int whence);
+
+SEEK_SET
+    The file offset is set to offset bytes.
+
+SEEK_CUR
+    The  file  offset  is  set  to  its current location plus offset bytes.
+
+   SEEK_END
+    The file offset is set to the  size  of  the  file  plus  offset bytes.
+</code></pre>
+<h2 id="Static-files-and-inode"><a href="#Static-files-and-inode" class="headerlink" title="Static files and inode"></a><strong>Static files and inode</strong></h2><p><em>Static files</em> are files that don’t change when your application is running.<br>，<br>硬盘的最小存储单位叫做“扇区”（Sector），每个扇区储存 512 字节（相当于 0.5KB），操作系统读取硬盘的时候，不会一个个扇区地读取，这样效率太低，而是一次性连续读取多个扇区，即一次性读取一个“块”（block）。这种由多个扇区组成的“块”，是文件存取的最小单位。“块”的大小，最常<br>见的是 4KB，即连续八个 sector 组成一个 block。所以由此可以知道，静态文件对应的数据都是存储在磁盘设备不同的“块”中.我们的磁盘在进行分区、格式化的时候会将其分为两个区域，一个是数据区，用于存储文件中的数据；另一个是 inode 区，用于存放 inode table（inode 表），inode table 中存放的是一个一个的 inode（也成为 inode节点），不同的 inode 就可以表示不同的文件，每一个文件都必须对应一个 inode，inode 实质上是一个结构体，这个结构体中有很多的元素，不同的元素记录了文件了不同信息，譬如文件字节大小、文件所有者、文件对应的读&#x2F;写&#x2F;执行权限、文件时间戳（创建时间、更新时间等）、文件类型、文件数据存储的 block（块）位置等等信息.inode table 表本身也需要占用磁盘的存储空间。每一个文件都有唯一的一个 inode，每一个 inode 都有一个与之相对应的数字编号，通过这个数字编号就可以找到 inode table 中所对应的 inode。  </p>
+<pre><code>//Check inode number:
+
+ls -i
+//or 
+stat filename
+</code></pre>
+<p>打开一个文件，系统内部会将这个过程分为三步：</p>
+<ol>
+<li>系统找到这个文件名所对应的 inode 编号；</li>
+<li>通过 inode 编号从 inode table 中找到对应的 inode 结构体；</li>
+<li>根据 inode 结构体中记录的信息，确定文件数据所在的 block，并读出数据。</li>
+</ol>
+<h2 id="strerror-amp-ensp-function"><a href="#strerror-amp-ensp-function" class="headerlink" title="strerror()&amp;ensp;function"></a><strong>strerror()&amp;ensp;function</strong></h2><p>The <strong>strerror()</strong> function returns a pointer to a string that describes the error code passed in the argument errnum.</p>
+<pre><code>#include &lt;string.h&gt;
+
+char *strerror(int errnum); // strerror(errno);need to include &lt;stdbool.h&gt;
+</code></pre>
+<p>use “man errno” to check list of error names.  </p>
+<h2 id="perror-amp-ensp-function"><a href="#perror-amp-ensp-function" class="headerlink" title="perror()&amp;ensp;function"></a><strong>perror()&amp;ensp;function</strong></h2><p>The perror() function produces a message on standard error describing the last error encountered during a call to a system or library function.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+void perror(const char *s);
+</code></pre>
+<h2 id="exit-、-exit-and-Exit"><a href="#exit-、-exit-and-Exit" class="headerlink" title="exit()、_exit()and_Exit()"></a><strong>exit()、_exit()and_Exit()</strong></h2><p>调用_exit()函数会清除其使用的内存空间，并销毁其在内核中的各种数据结构，关闭进程的所有文件描述符，并结束进程、将控制权交给操作系统。</p>
+<pre><code>#include &lt;unistd.h&gt;
+void _exit(int status);
+
+#include &lt;stdlib.h&gt;
+void _Exit(int status);
+
+#include &lt;stdlib.h&gt;
+void exit(int status);
+</code></pre>
+<h2 id="hole-file-amp-ensp-空洞文件"><a href="#hole-file-amp-ensp-空洞文件" class="headerlink" title="hole file&amp;ensp;空洞文件"></a><strong>hole file&amp;ensp;空洞文件</strong></h2><p>在Linux中，lseek的系统调用是可以改变在文件上面的偏移量的，而且还允许其超出文件的长度。偏移量一旦超出了文件的长度，下一次进行文件IO写入操作文件的时候便会延续偏移量的位置继续写入，进而在文件中间产生了空洞的部分，这部分会以”\0”填充，而从原来的文件结尾到新写入数据间的这段空间就被称为“文件空洞”。<br>在Linux中，EOF（文件结束符）并不是一个字符，而是在读取到文件末尾的时候返回的一个信号值，也就是-1。<br>文件空洞部分实际上是不会占用任何的物理空间的，直到在某个时刻对空洞部分进行写入文件内容的时候才会为它分配对应的空间。但是在空洞文件形成的时候，逻辑上面的文件大小是分配了空洞部分的大小的。空洞文件对多线程共同操作文件是及其有用的，有时候我们创建一个很大的文件，如果单个线程从头开始依次构建该文件需要很长的时间，有一种思路就是将文件分为多段，然后使用多线程来操作，每个线程负责其中一段数据的写入.  </p>
+<p>##<strong>多次打开同一个文件</strong>##</p>
+<ul>
+<li>一个进程内多次 open 打开同一个文件，在内存中并不会存在多份动态文<br>件。</li>
+<li>一个进程内多次 open 打开同一个文件，不同文件描述符所对应的读写位置偏移量是相互独立的。</li>
+<li>在 Linux 系统中，open 返回得到的文件描述符 fd 可以进行复制，复制成功之后可以得到一个新的文件描述符，使用新的文件描述符和旧的文件描述符都可以对文件进行 IO 操作，复制得到的文件描述符和旧的文件描述符拥有相同的权限.“复制”的含义实则是复制文件表。</li>
+</ul>
+<h2 id="dup-amp-ensp-function"><a href="#dup-amp-ensp-function" class="headerlink" title="dup()&amp;ensp;function"></a><strong>dup()&amp;ensp;function</strong></h2><p>The dup() system call creates a copy of the file descriptor oldfd, using the lowest-numbered unused file descriptor for the new descriptor. After a successful return, the old and new file descriptors may be used interchangeably. </p>
+<pre><code>#include &lt;unistd.h&gt;
+
+int dup(int oldfd);
+int dup2(int oldfd, int newfd);
+</code></pre>
+<p>The dup2() system call performs the same task as dup(), but instead of using the lowest-numbered unused file descriptor, it uses the file descriptor number specified in newfd.  If the file  descrip‐tor newfd was previously open, it is silently closed before being reused.</p>
+<h2 id="atomicity-operating-and-race-conditions-race-hazards"><a href="#atomicity-operating-and-race-conditions-race-hazards" class="headerlink" title="atomicity operating and race conditions(race hazards)"></a><strong>atomicity operating and race conditions(race hazards)</strong></h2><p>All system calls are executed atomically. By this, we mean that the kernel guarantees that all of the steps in a system call are completed as a single operation, without being interrupted by another process or thread.<br>Arace condition is a situation where the result produced by two processes (or threads) operating on shared resources depends in an unexpected way on the rela-tive order in which the processes gain access to the CPU(s).<br>每个进程（或线程）去操作文件的顺序是不可预期的，即这些进程获得 CPU 使用权的先后顺序是不可预期的，完全由操作系统调配，这就是所谓的竞争<br>状态。<br>所谓原子操作，是有多步操作组成的一个操作，原子操作要么一步也不执行，一旦执行，必须要执行完所有步骤，不可能只执行所有步骤中的一个子集。Flag:O_APPEND.当 open 函数的 flags 参数中包含了 O_APPEND 标志，每次执行 write 写入操作时都会将文件当前写位置偏移量移动到文件末尾，然后再写入数据，这里“移动当前写位置偏移量到文件末尾、写入数据”这两个操作步骤就组成了一个原子操作.<br>将“判断文件是否存在、创建文件”这两个步骤合成为一个原子操作，有了原子操作</p>
+<h2 id="pread-amp-ensp-and-pwrite-function"><a href="#pread-amp-ensp-and-pwrite-function" class="headerlink" title="pread()&amp;ensp; and pwrite() function"></a><strong>pread()&amp;ensp; and pwrite() function</strong></h2><p>pread() reads up to count bytes from file descriptor fd at offset  off‐set  (from the start of the file) into the buffer starting at buf.  Thefile offset is not changed.<br>pwrite() writes up to count bytes from the buffer starting  at  buf  to the  file  descriptor  fd  at  offset  offset.   The file offset is not changed.</p>
+<pre><code>    #include &lt;unistd.h&gt;
+
+   ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+
+   ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+</code></pre>
+<p>The  pread()  and pwrite() system calls are especially useful in multi‐threaded applications.  They allow multiple threads to perform  I&#x2F;O  on the  same file descriptor without being affected by changes to the file<br>offset by other threads</p>
+<h2 id="Difference-between-Process-and-Thread"><a href="#Difference-between-Process-and-Thread" class="headerlink" title="Difference between Process and Thread"></a><strong>Difference between Process and Thread</strong></h2><p><em>Process</em>(进程): Processes are basically the programs that are dispatched from the ready state and are scheduled in the CPU for execution. PCB(Process Control Block) holds the concept of process. A process can create other processes which are known as Child Processes. The process takes more time to terminate and it is isolated means it does not share the memory with any other process.<br>The process can have the following states new, ready, running, waiting, terminated, and suspended. </p>
+<p><em>Thread</em>(线程): Thread is the segment of a process which means a process can have multiple threads and these multiple threads are contained within a process. A thread has three states: Running, Ready, and Blocked. </p>
+<p>The thread takes less time to terminate as compared to the process but unlike the process, threads do not isolate. </p>
+<h2 id="fcntl-amp-ensp-function-and-ioctl-function"><a href="#fcntl-amp-ensp-function-and-ioctl-function" class="headerlink" title="fcntl()&amp;ensp;function and ioctl() function"></a><strong>fcntl()&amp;ensp;function and ioctl() function</strong></h2><p><strong>fcntl()</strong>&amp;ensp;performs one of the operations described below on the open file descriptor fd.  The operation is determined by cmd.</p>
+<pre><code>   #include &lt;unistd.h&gt;
+   #include &lt;fcntl.h&gt;
+
+   int fcntl(int fd, int cmd, ... /* arg */ );
+</code></pre>
+<p>The  <strong>ioctl()</strong>  system call manipulates the underlying device parameters of special files.  In particular, many operating characteristics of character special files (e.g., terminals) may be controlled with ioctl() requests.  The argument fd must be an open file descriptor.</p>
+<pre><code>#include &lt;sys/ioctl.h&gt;
+
+int ioctl(int fd, unsigned long request, ...);
+</code></pre>
+<h2 id="File-Truncation-truncate-amp-ensp-function-and-ftruncate-fucntion"><a href="#File-Truncation-truncate-amp-ensp-function-and-ftruncate-fucntion" class="headerlink" title="File Truncation,truncate()&amp;ensp;function and ftruncate() fucntion"></a><strong>File Truncation,truncate()&amp;ensp;function and ftruncate() fucntion</strong></h2><pre><code>#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+int truncate(const char *path, off_t length);
+int ftruncate(int fd, off_t length);
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a><strong>Reference</strong></h2><blockquote>
+<p>[1]<a target="_blank" rel="noopener" href="https://banbanpeppa.github.io/2019/08/21/linux/holefile/">https://banbanpeppa.github.io/2019/08/21/linux/holefile/</a><br>[2]linux man document<br>[3]<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/difference-between-process-and-thread/">https://www.geeksforgeeks.org/difference-between-process-and-thread/</a></p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://noobnemo.live/2022/10/30/I-O-basic/" title="I/O basic" target="_blank" rel="external">https://noobnemo.live/2022/10/30/I-O-basic/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/log.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">文弱书生孙大彪</span><small class="ml-1x">开发</small></a></h3>
+        <div>半犬半儒。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/10/13/Meaning-of-man-page-numbers/" title="Meaning of man page numbers"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
