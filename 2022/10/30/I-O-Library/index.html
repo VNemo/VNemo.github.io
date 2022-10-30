@@ -17,21 +17,20 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>C语言常用数据类型打印转换字符 | 文弱书生孙大彪</title>
-  <meta name="description" content="常用数据类型打印转换字符   数据类型 转换字符（转换说明）    short %h   int %d   unsigned int %u   long %ld   unsigned long %lu   long long %lld   unsigned long long %llu   float %f   double %f   scientific notation %e   char %">
+  <title>I/O Library | 文弱书生孙大彪</title>
+  <meta name="description" content="stdio.h当使用标准 I&#x2F;O 库函数打开或创建一个文件时，会返回一个指向 FILE 类型对象的指针（FILE *），使用该 FILE 指针与被打开或创建的文件相关联，然后该 FILE 指针就用于后续的标准 I&#x2F;O 操作（使用标准 I&#x2F;O 库函数进行 I&#x2F;O 操作），所以由此可知，FILE 指针的作用相当于文件描述符.FILE 是一个结构体数据类型，它包含">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言常用数据类型打印转换字符">
-<meta property="og:url" content="https://noobnemo.live/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/index.html">
+<meta property="og:title" content="I&#x2F;O Library">
+<meta property="og:url" content="https://noobnemo.live/2022/10/30/I-O-Library/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="常用数据类型打印转换字符   数据类型 转换字符（转换说明）    short %h   int %d   unsigned int %u   long %ld   unsigned long %lu   long long %lld   unsigned long long %llu   float %f   double %f   scientific notation %e   char %">
+<meta property="og:description" content="stdio.h当使用标准 I&#x2F;O 库函数打开或创建一个文件时，会返回一个指向 FILE 类型对象的指针（FILE *），使用该 FILE 指针与被打开或创建的文件相关联，然后该 FILE 指针就用于后续的标准 I&#x2F;O 操作（使用标准 I&#x2F;O 库函数进行 I&#x2F;O 操作），所以由此可知，FILE 指针的作用相当于文件描述符.FILE 是一个结构体数据类型，它包含">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-10-13T01:51:48.000Z">
-<meta property="article:modified_time" content="2022-10-13T01:52:09.062Z">
+<meta property="article:published_time" content="2022-10-30T11:05:32.000Z">
+<meta property="article:modified_time" content="2022-10-30T11:05:56.314Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://noobnemo.live/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/index.html">
+  <link rel="canonical" href="https://noobnemo.live/2022/10/30/I-O-Library/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -341,14 +340,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-C语言常用数据类型打印转换字符" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-I-O-Library" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      C语言常用数据类型打印转换字符
+      I/O Library
     </h1>
   
 
@@ -356,98 +355,112 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/" class="article-date">
-	  <time datetime="2022-10-13T01:51:48.000Z" itemprop="datePublished">2022-10-13</time>
+	<a href="/2022/10/30/I-O-Library/" class="article-date">
+	  <time datetime="2022-10-30T11:05:32.000Z" itemprop="datePublished">2022-10-30</time>
 	</a>
 </span>
         
         
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Linux/" rel="tag">Linux</a>
-  </span>
-
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/30/I-O-Library/#comments" class="article-comment-link">评论</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h2 id="常用数据类型打印转换字符"><a href="#常用数据类型打印转换字符" class="headerlink" title="常用数据类型打印转换字符"></a>常用数据类型打印转换字符</h2><table>
-<thead>
-<tr>
-<th align="center">数据类型</th>
-<th align="center">转换字符（转换说明）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">short</td>
-<td align="center">%h</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">%d</td>
-</tr>
-<tr>
-<td align="center">unsigned int</td>
-<td align="center">%u</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">%ld</td>
-</tr>
-<tr>
-<td align="center">unsigned long</td>
-<td align="center">%lu</td>
-</tr>
-<tr>
-<td align="center">long long</td>
-<td align="center">%lld</td>
-</tr>
-<tr>
-<td align="center">unsigned long long</td>
-<td align="center">%llu</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">%f</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">%f</td>
-</tr>
-<tr>
-<td align="center">scientific notation</td>
-<td align="center">%e</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">%c</td>
-</tr>
-<tr>
-<td align="center">Octal</td>
-<td align="center">%o</td>
-</tr>
-<tr>
-<td align="center">Hexadecimal</td>
-<td align="center">%x</td>
-</tr>
-<tr>
-<td align="center">Octal prefix</td>
-<td align="center">%#o</td>
-</tr>
-<tr>
-<td align="center">Hexadecimal prefix</td>
-<td align="center">%#x</td>
-</tr>
-<tr>
-<td align="center">pointer</td>
-<td align="center">%p</td>
-</tr>
-</tbody></table>
+        <h1 id="stdio-h"><a href="#stdio-h" class="headerlink" title="stdio.h"></a><strong>stdio.h</strong></h1><p>当使用标准 I&#x2F;O 库函数打开或创建一个文件时，会返回一个指向 FILE 类型对象的指针（FILE *），使用该 FILE 指针与被打开或创建的文件相关<br>联，然后该 FILE 指针就用于后续的标准 I&#x2F;O 操作（使用标准 I&#x2F;O 库函数进行 I&#x2F;O 操作），所以由此可知，FILE 指针的作用相当于文件描述符.FILE 是一个结构体数据类型，它包含了标准 I&#x2F;O 库函数为管理文件所需要的所有信息.</p>
+<h2 id="fopen-amp-ensp-function"><a href="#fopen-amp-ensp-function" class="headerlink" title="fopen()&amp;ensp;function"></a><strong>fopen()&amp;ensp;function</strong></h2><p>The fopen() function opens the file whose name is the string pointed to by pathname and associates a stream with it.</p>
+<pre><code> #include &lt;stdio.h&gt;
+
+ FILE *fopen(const char *pathname, const char *mode);
+</code></pre>
+<h2 id="fclose-amp-ensp-function"><a href="#fclose-amp-ensp-function" class="headerlink" title="fclose()&amp;ensp;function"></a><strong>fclose()&amp;ensp;function</strong></h2><p>The fclose() function flushes the stream pointed to by stream (writing any buffered output data using fflush(3)) and closes the underlying file descriptor.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int fclose(FILE *stream);
+</code></pre>
+<h2 id="fread-amp-ensp-function-and-fwrite-function"><a href="#fread-amp-ensp-function-and-fwrite-function" class="headerlink" title="fread()&amp;ensp;function and fwrite() function"></a><strong>fread()&amp;ensp;function and fwrite() function</strong></h2><p>The function fread() reads nmemb items of data, each size bytes long, from the stream pointed to by stream, storing them at the location given by ptr.<br>The function fwrite() writes nmemb items of data, each size bytes long, to the stream pointed to by stream, obtaining them from the location given by ptr.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+</code></pre>
+<h2 id="fseek-amp-ensp-function"><a href="#fseek-amp-ensp-function" class="headerlink" title="fseek()&amp;ensp;function"></a><strong>fseek()&amp;ensp;function</strong></h2><p> The  fseek()  function  sets  the  file  position indicator for the stream pointed to by stream.  The new position, measured in bytes, is obtained by adding offset bytes to the position specified by<br>whence.  If whence is set to SEEK_SET, SEEK_CUR, or SEEK_END, the offset is relative to the start of the file, the current position indicator, or end-of-file, respectively.  A successful call to the fseek() function clears the end-of-file indicator for the stream and undoes any effects of the ungetc(3) function on the same<br>stream.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int fseek(FILE *stream, long offset, int whence);
+</code></pre>
+<h2 id="ftell-amp-ensp-function"><a href="#ftell-amp-ensp-function" class="headerlink" title="ftell()&amp;ensp;function"></a><strong>ftell()&amp;ensp;function</strong></h2><p>The ftell() function obtains the current value of the file position indicator for the stream pointed to by stream.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int fseek(FILE *stream, long offset, int whence);
+
+long ftell(FILE *stream);
+</code></pre>
+<h2 id="clearerr-amp-ensp-function"><a href="#clearerr-amp-ensp-function" class="headerlink" title="clearerr()&amp;ensp;function"></a><strong>clearerr()&amp;ensp;function</strong></h2><p>The function clearerr() clears the end-of-file and error indicators for the stream pointed to by stream.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+void clearerr(FILE *stream);
+</code></pre>
+<h2 id="snprintf-amp-ensp-function"><a href="#snprintf-amp-ensp-function" class="headerlink" title="snprintf()&amp;ensp;function"></a><strong>snprintf()&amp;ensp;function</strong></h2><p>The functions snprintf() and vsnprintf() write at most size bytes (including the terminating null byte (‘\0’)) to str.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+int snprintf(char *str, size_t size, const char *format, ...);
+</code></pre>
+<h2 id="I-x2F-O-cache"><a href="#I-x2F-O-cache" class="headerlink" title="I&#x2F;O cache"></a><strong>I&#x2F;O cache</strong></h2><p>read()和 write()系统调用在进行文件读写操作的时候并不会直接访问磁盘设备，而是仅仅在用户空间缓冲区和内核缓冲区（kernel buffer cache）之间复制数据。</p>
+<h2 id="fsync-amp-ensp-function"><a href="#fsync-amp-ensp-function" class="headerlink" title="fsync()&amp;ensp;function"></a><strong>fsync()&amp;ensp;function</strong></h2><p>fsync()  transfers  (“flushes”) all modified in-core data of (i.e., modified buffer cache pages for) the file referred to by the file descriptor fd to the disk device (or other permanent storage device) so that all changed information can be retrieved even if the system crashes or is rebooted.    </p>
+<pre><code>#include &lt;unistd.h&gt;
+
+int fsync(int fd);
+</code></pre>
+<h2 id="sync-amp-ensp-function"><a href="#sync-amp-ensp-function" class="headerlink" title="sync()&amp;ensp;function"></a><strong>sync()&amp;ensp;function</strong></h2><p>Linux command sync  </p>
+<pre><code>#include &lt;unistd.h&gt;
+
+void sync(void);
+</code></pre>
+<h2 id="Dirct-I-x2F-O-raw-I-x2F-O"><a href="#Dirct-I-x2F-O-raw-I-x2F-O" class="headerlink" title="Dirct I&#x2F;O (raw I&#x2F;O)"></a><strong>Dirct I&#x2F;O (raw I&#x2F;O)</strong></h2><p>我们可针对某一文件或块设备执行直接 I&#x2F;O，要做到这一点，需要在调用 open()函数打开文件时，指定O_DIRECT 标志，该标志至 Linux 内核 2.4.10 版本开始生效，譬如：</p>
+<pre><code>fd = open(filepath, O_WRONLY | O_DIRECT);
+</code></pre>
+<p>因为直接 I&#x2F;O 涉及到对磁盘设备的直接访问，所以在执行直接 I&#x2F;O 时，必须要遵守以下三个对齐限制要求：<br>⚫ 应用程序中用于存放数据的缓冲区，其内存起始地址必须以块大小的整数倍进行对齐；<br>⚫ 写文件时，文件的位置偏移量必须是块大小的整数倍；<br>⚫ 写入到文件的数据大小必须是块大小的整数倍。  </p>
+<h2 id="Raw-I-x2F-O"><a href="#Raw-I-x2F-O" class="headerlink" title="*Raw I&#x2F;O"></a>*<strong>Raw I&#x2F;O</strong></h2><p>因为直接 I&#x2F;O 涉及到对磁盘设备的直接访问，所以在执行直接 I&#x2F;O 时，必须要遵守以下三个对齐限制要<br>求：<br>⚫ 应用程序中用于存放数据的缓冲区，其内存起始地址必须以块大小的整数倍进行对齐；<br>⚫ 写文件时，文件的位置偏移量必须是块大小的整数倍；<br>⚫ 写入到文件的数据大小必须是块大小的整数倍。</p>
+<h2 id="setvbuf-amp-ensp-function"><a href="#setvbuf-amp-ensp-function" class="headerlink" title="setvbuf()&amp;ensp;function"></a><strong>setvbuf()&amp;ensp;function</strong></h2><p>The  three  types  of  buffering available are unbuffered, block buffered, and line buffered.  When an output stream is unbuffered, information appears on the destination file or terminal as soon as<br>written; when it is block buffered many characters are saved up and written as a block; when it is line buffered characters are saved up until a newline is output or input is read  from  any  stream<br>attached to a terminal device (typically stdin).  The function fflush(3) may be used to force the block out early.<br>Normally all files are block buffered.  </p>
+<pre><code>_IONBF unbuffered
+
+_IOLBF line buffered //(default)
+
+_IOFBF fully buffered
+</code></pre>
+<h2 id="fflush-amp-ensp-function"><a href="#fflush-amp-ensp-function" class="headerlink" title="fflush()&amp;ensp;function"></a><strong>fflush()&amp;ensp;function</strong></h2><p>For output streams, fflush() forces a write of all user-space buffered data for the given output or update stream via the stream’s underlying write function.</p>
+<p>For  input streams associated with seekable files (e.g., disk files, but not pipes or terminals), fflush() discards any buffered data that has been fetched from the underlying file, but has not been consumed by the application.  </p>
+<pre><code>#include &lt;stdio.h&gt;
+int fflush(FILE *stream);
+</code></pre>
+<h3 id="Another-way-to-flush-the"><a href="#Another-way-to-flush-the" class="headerlink" title="Another way to flush the"></a>Another way to flush the</h3><pre><code>fclose(stdout);
+</code></pre>
+<h2 id="fdopen-amp-ensp-and-fileno-function"><a href="#fdopen-amp-ensp-and-fileno-function" class="headerlink" title="fdopen()&amp;ensp;and fileno() function"></a><strong>fdopen()&amp;ensp;and fileno() function</strong></h2><p>The fdopen() function associates a stream with the eqxisting file descriptor, fd.<br>The  function  fileno()  examines  the  argument  stream  and returns the integer file descriptor used to implement this stream.  The file descriptor is still owned by stream and will be closed when fclose(3) is called.  Duplicate the file descriptor with dup(2) before passing it to code that might close it.</p>
+<pre><code>#include &lt;stdio.h&gt;
+int fileno(FILE *stream);
+FILE *fdopen(int fd, const char *mode);
+</code></pre>
+<pre>              ┌─────────────┬───────────────────────────────┐
+              │<b>fopen()</b> <b>mode</b> │ <b>open()</b> <b>flags</b>                  │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">r</u>       │ O_RDONLY                      │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">w</u>       │ O_WRONLY | O_CREAT | O_TRUNC  │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">a</u>       │ O_WRONLY | O_CREAT | O_APPEND │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">r+</u>      │ O_RDWR                        │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">w+</u>      │ O_RDWR | O_CREAT | O_TRUNC    │
+              ├─────────────┼───────────────────────────────┤
+              │     <u style="text-decoration-style:single">a+</u>      │ O_RDWR | O_CREAT | O_APPEND   │
+              └─────────────┴───────────────────────────────┘
+</pre>
+
 
       
     </div>
@@ -457,7 +470,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://noobnemo.live/2022/10/13/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%93%E5%8D%B0%E8%BD%AC%E6%8D%A2%E5%AD%97%E7%AC%A6/" title="C语言常用数据类型打印转换字符" target="_blank" rel="external">https://noobnemo.live/2022/10/13/C语言常用数据类型打印转换字符/</a>
+      <a href="https://noobnemo.live/2022/10/30/I-O-Library/" title="I/O Library" target="_blank" rel="external">https://noobnemo.live/2022/10/30/I-O-Library/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -503,13 +516,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2022/10/13/Linux-Directory/" title="Linux Directory"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2022/10/03/hello-world/" title="hello world"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/10/30/I-O-basic/" title="I/O basic"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
